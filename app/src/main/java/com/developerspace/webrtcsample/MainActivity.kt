@@ -3,9 +3,12 @@ package com.developerspace.webrtcsample
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
+import com.google.android.material.button.MaterialButton
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_start.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,6 +17,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
+        val ll: LinearLayout =
+            layoutInflater.inflate(R.layout.activity_main, null) as LinearLayout
+        val start_meeting = ll.findViewById<MaterialButton>(R.id.start_meeting)
+        val meeting_id = ll.findViewById<EditText>(R.id.meeting_id)
+        val join_meeting = ll.findViewById<MaterialButton>(R.id.join_meeting)
         Constants.isIntiatedNow = true
         Constants.isCallEnded = true
         start_meeting.setOnClickListener {

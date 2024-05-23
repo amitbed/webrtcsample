@@ -16,6 +16,7 @@
         android:theme="@style/Theme.WebRTCSample">
         <activity android:name="com.developerspace.webrtcsample.MainActivity"
             android:screenOrientation="portrait"
+            android:exported="true"
             android:theme="@style/Theme.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
