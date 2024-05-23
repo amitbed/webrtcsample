@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "55271012400",
+    "project_id": "webrtc-app-bdfba",
+    "storage_bucket": "webrtc-app-bdfba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55271012400:android:7bb12242477b55881615f5",
+        "android_client_info": {
+          "package_name": "com.symm.webrtcsample"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmnT6t6X-tmWFGK3-xtImiiUUFvjOme9s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
