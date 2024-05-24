@@ -12,6 +12,7 @@ import android.os.Build
 import android.preference.PreferenceManager
 import android.util.Log
 import androidx.annotation.Nullable
+import com.symm.webrtcsample.R
 import org.webrtc.ThreadUtils
 import java.util.*
 import kotlin.collections.HashSet

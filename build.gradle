@@ -4,10 +4,12 @@ buildscript {
     ext.ktor_version = '1.1.4'
     repositories {
         google()
+        mavenCentral()
+        maven { url 'https://dl.bintray.com/google/webrtc' }
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.1'
+        classpath 'com.android.tools.build:gradle:8.4.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.4.1'
         // NOTE: Do not place your application dependencies here; they belong
@@ -15,16 +17,8 @@ buildscript {
     }
 }
 plugins {
-    id 'com.android.application' version '8.1.0' apply false
+    id 'com.android.application' version '8.4.1' apply false
     id 'com.google.gms.google-services' version '4.4.1' apply false
-}
-allprojects {
-    repositories {
-        google()
-        maven {
-            url "https://maven.google.com"
-        }
-    }
 }
 
 task clean(type: Delete) {

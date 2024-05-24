@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.symm.webrtcsample.R
 
 class MainActivity : AppCompatActivity() {
 
