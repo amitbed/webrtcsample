@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.firestore.ktx.firestore
@@ -17,8 +18,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
-        val ll: LinearLayout =
-            layoutInflater.inflate(R.layout.activity_main, null) as LinearLayout
+        val ll: RelativeLayout =
+            layoutInflater.inflate(R.layout.activity_main, null) as RelativeLayout
         val start_meeting = ll.findViewById<MaterialButton>(R.id.start_meeting)
         val meeting_id = ll.findViewById<EditText>(R.id.meeting_id)
         val join_meeting = ll.findViewById<MaterialButton>(R.id.join_meeting)
