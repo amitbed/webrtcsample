@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    tools:context=".RTCActivity">
+
+    <org.webrtc.SurfaceViewRenderer
+        android:id="@+id/remoteView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <org.webrtc.SurfaceViewRenderer
+        android:id="@+id/localView"
+        android:elevation="16dp"
+        android:layout_margin="8dp"
+        android:layout_above="@+id/controls"
+        android:layout_width="120dp"
+        android:layout_height="150dp" />
+    <ProgressBar
+        android:layout_centerInParent="true"
+        android:id="@+id/remoteViewLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="@id/remoteView"
+        app:layout_constraintEnd_toEndOf="@id/remoteView"
+        app:layout_constraintStart_toStartOf="@id/remoteView"
+        app:layout_constraintTop_toTopOf="@id/remoteView" />
+    <LinearLayout
+        android:gravity="center"
+        android:background="@drawable/curve_background"
+        android:backgroundTint="@android:color/secondary_text_light"
+        android:id="@+id/controls"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/micButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="12dp"
+            android:background="@drawable/circle_background"
+            app:backgroundTint="@color/cardview_dark_background"
+            app:srcCompat="@drawable/ic_baseline_mic_24" />
+        <ImageView
+            android:id="@+id/videoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="12dp"
+            android:background="@drawable/circle_background"
+            app:backgroundTint="@color/cardview_dark_background"
+            app:srcCompat="@drawable/ic_baseline_videocam_24" />
+        <ImageView
+            android:id="@+id/endCallButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="12dp"
+            android:background="@drawable/circle_background"
+            app:backgroundTint="@android:color/holo_red_dark"
+            app:srcCompat="@drawable/ic_baseline_call_end_24" />
+        <ImageView
+            android:id="@+id/switchCameraButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="12dp"
+            android:background="@drawable/circle_background"
+            app:backgroundTint="@color/cardview_dark_background"
+            app:srcCompat="@drawable/ic_baseline_cameraswitch_24" />
+        <ImageView
+            android:id="@+id/audioOutputButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_margin="16dp"
+            android:padding="12dp"
+            android:background="@drawable/circle_background"
+            app:backgroundTint="@color/cardview_dark_background"
+            app:srcCompat="@drawable/ic_baseline_speaker_up_24" />
+    </LinearLayout>
+
+</RelativeLayout>
