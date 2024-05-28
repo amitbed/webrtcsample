@@ -3,14 +3,38 @@ package com.symm.webrtcsample
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import com.developerspace.webrtcsample.TouchPoint
+import com.developerspace.webrtcsample.TouchTrackerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import org.webrtc.*
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.webrtc.AudioTrack
+import org.webrtc.Camera2Enumerator
+import org.webrtc.DataChannel
+import org.webrtc.DefaultVideoDecoderFactory
+import org.webrtc.DefaultVideoEncoderFactory
+import org.webrtc.EglBase
+import org.webrtc.IceCandidate
+import org.webrtc.MediaConstraints
+import org.webrtc.PeerConnection
+import org.webrtc.PeerConnectionFactory
+import org.webrtc.SdpObserver
+import org.webrtc.SessionDescription
+import org.webrtc.SurfaceTextureHelper
+import org.webrtc.SurfaceViewRenderer
+import org.webrtc.VideoCapturer
+import org.webrtc.VideoTrack
+import java.nio.ByteBuffer
 
 
 class RTCClient(
         context: Application,
-        observer: PeerConnection.Observer
+        observer: PeerConnection.Observer,
+        private val coroutineScope: CoroutineScope
 ) {
 
     companion object {
@@ -21,10 +45,12 @@ class RTCClient(
     private val rootEglBase: EglBase = EglBase.create()
 
     private var localAudioTrack : AudioTrack? = null
+
     private var localVideoTrack : VideoTrack? = null
     val TAG = "RTCClient"
+    private var remoteSessionDescription : SessionDescription? = null
 
-    var remoteSessionDescription : SessionDescription? = null
+    var touchDataListener: TouchTrackerView.TouchDataListener? = null
 
     val db = Firebase.firestore
 
@@ -42,7 +68,9 @@ class RTCClient(
 
     private val audioSource by lazy { peerConnectionFactory.createAudioSource(MediaConstraints())}
     private val localVideoSource by lazy { peerConnectionFactory.createVideoSource(false) }
-    private val peerConnection by lazy { buildPeerConnection(observer) }
+    val peerConnection by lazy { buildPeerConnection(observer) }
+
+    private var dataChannel: DataChannel? = null
 
     private fun initPeerConnectionFactory(context: Application) {
         val options = PeerConnectionFactory.InitializationOptions.builder(context)
@@ -50,6 +78,52 @@ class RTCClient(
                 .setFieldTrials("WebRTC-H264HighProfile/Enabled/")
                 .createInitializationOptions()
         PeerConnectionFactory.initialize(options)
+    }
+
+    private fun createDataChannel() {
+        if (dataChannel != null) {
+            Log.d(TAG, "Data channel is already created")
+            return
+        }
+        val init = DataChannel.Init()
+        init.id = 1
+
+        // For some reason I can't create data channel here
+        // but everything should work, if fix this issue
+        dataChannel = peerConnection?.createDataChannel("touchChannel", init)
+        dataChannel?.registerObserver(object : DataChannel.Observer {
+            override fun onBufferedAmountChange(p0: Long) = Unit
+
+            override fun onStateChange() = Unit
+
+            override fun onMessage(buffer: DataChannel.Buffer) {
+                Log.d(TAG, "New message received")
+                val data = buffer.data
+                val bytes = ByteArray(data.remaining())
+                data.get(bytes)
+                val points = extractTouchPoints(String(bytes))
+                touchDataListener?.onSendTouchData(points)
+            }
+        })
+    }
+
+    fun sendTouchData(touchPoints: List<TouchPoint>) {
+        createDataChannel()
+        coroutineScope.launch (Dispatchers.IO) {
+            val message = buildTouchPointsMessage(touchPoints)
+            val buffer = DataChannel.Buffer(ByteBuffer.wrap(message.toByteArray()), false)
+            Log.d(TAG, "Sending pack of touch events $dataChannel")
+            dataChannel?.send(buffer)
+        }
+    }
+
+    private fun extractTouchPoints(message: String): List<TouchPoint> {
+        val listType = object : TypeToken<List<TouchPoint>>() {}.type
+        return Gson().fromJson(message, listType)
+    }
+
+    private fun buildTouchPointsMessage(touchPoints: List<TouchPoint>): String {
+        return Gson().toJson(touchPoints)
     }
 
     private fun buildPeerConnectionFactory(): PeerConnectionFactory {
@@ -88,7 +162,7 @@ class RTCClient(
         val surfaceTextureHelper = SurfaceTextureHelper.create(Thread.currentThread().name, rootEglBase.eglBaseContext)
         (videoCapturer as VideoCapturer).initialize(surfaceTextureHelper, localVideoOutput.context, localVideoSource.capturerObserver)
         videoCapturer.startCapture(320, 240, 60)
-        localAudioTrack = peerConnectionFactory.createAudioTrack(LOCAL_TRACK_ID + "_audio", audioSource);
+        localAudioTrack = peerConnectionFactory.createAudioTrack(LOCAL_TRACK_ID + "_audio", audioSource)
         localVideoTrack = peerConnectionFactory.createVideoTrack(LOCAL_TRACK_ID, localVideoSource)
         localVideoTrack?.addSink(localVideoOutput)
 
@@ -263,7 +337,7 @@ class RTCClient(
         if (localAudioTrack != null)
             localAudioTrack?.setEnabled(audioEnabled)
     }
-    fun switchCamera() {
-        videoCapturer.switchCamera(null)
-    }
+//    fun switchCamera() {
+//        videoCapturer.switchCamera(null)
+//    }
 }
