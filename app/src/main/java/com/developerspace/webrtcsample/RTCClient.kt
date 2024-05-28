@@ -91,9 +91,14 @@ class RTCClient(
         localAudioTrack = peerConnectionFactory.createAudioTrack(LOCAL_TRACK_ID + "_audio", audioSource);
         localVideoTrack = peerConnectionFactory.createVideoTrack(LOCAL_TRACK_ID, localVideoSource)
         localVideoTrack?.addSink(localVideoOutput)
+
         val localStream = peerConnectionFactory.createLocalMediaStream(LOCAL_STREAM_ID)
+
         localStream.addTrack(localVideoTrack)
         localStream.addTrack(localAudioTrack)
+
+        peerConnection?.addTrack(localVideoTrack)
+        peerConnection?.addTrack(localAudioTrack)
     }
 
     private fun PeerConnection.call(sdpObserver: SdpObserver, meetingID: String) {

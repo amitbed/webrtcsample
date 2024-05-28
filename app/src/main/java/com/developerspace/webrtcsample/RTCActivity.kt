@@ -135,7 +135,9 @@ class RTCActivity : AppCompatActivity() {
                     override fun onAddStream(p0: MediaStream?) {
                         super.onAddStream(p0)
                         Log.e(TAG, "onAddStream: $p0")
-                        p0?.videoTracks?.get(0)?.addSink(binding.remoteView)
+                        if ((p0?.videoTracks?.size ?: 0) > 0) {
+                            p0?.videoTracks?.get(0)?.addSink(binding.remoteView)
+                        }
                     }
 
                     override fun onIceConnectionChange(p0: PeerConnection.IceConnectionState?) {
