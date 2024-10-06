@@ -54,6 +54,10 @@ android {
         jvmTarget = '11'
     }
 }
+configurations.configureEach {
+    exclude group: 'org.jetbrains.kotlinx', module: 'kotlinx-serialization-runtime'
+    exclude group: 'org.jetbrains.kotlinx', module: 'kotlinx-serialization-runtime-common'
+}
 
 dependencies {
 
@@ -65,13 +69,15 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.1")
-    implementation 'org.webrtc:google-webrtc:1.0.32006'
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+//    implementation 'org.webrtc:google-webrtc:1.0.32006'
+    implementation("com.dafruits:webrtc:123.0.0")
     implementation platform('com.google.firebase:firebase-bom:33.0.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     // Declare the dependency for the Cloud Firestore library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3"
 
     //Ktor dependencies (you can retorfit instead)
     implementation("io.ktor:ktor-client-android:$ktor_version")
